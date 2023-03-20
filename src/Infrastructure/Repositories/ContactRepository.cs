@@ -10,7 +10,6 @@ public class ContactRepository : IContactRepository
     {
         if (Database.Contacts.Contains(contact)) return contact;
 
-        contact.Id = Database.Contacts.Count > 0 ? Database.Contacts.Max(c => c.Id) + 1 : 1;
         Database.Contacts.Add(contact);
         return contact;
     }

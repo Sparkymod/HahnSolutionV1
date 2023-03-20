@@ -7,4 +7,5 @@ public interface IContactService
     public bool RemoveById(int id);
     public IReadOnlyCollection<Contact> GetAll();
     public Contact GetById(int id);
+    public bool Exist(Contact contact);
 }
