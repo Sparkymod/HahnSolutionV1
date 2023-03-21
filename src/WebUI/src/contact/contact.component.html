@@ -38,7 +38,7 @@
   </tbody>
 </table>
 <br />
-<br />
+
 <h2> Add or update contact</h2>
 <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: center;">
   <form [formGroup]="contactForm" id="addContactForm"
@@ -89,3 +89,12 @@
 <br />
 <hr />
 <br />
+<div style="display: flex; flex-direction: row; gap: 1rem;">
+  <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+    <label>
+      Search by Id
+      <input type="number" id="search" (change)="change($event)" />
+    </label>
+    <button class="btn-info" (click)="onGetByIdClick(contactId)" name="search"> Search</button>
+  </div>
+</div>

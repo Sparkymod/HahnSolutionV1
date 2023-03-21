@@ -46,6 +46,7 @@ export class ContactComponent implements OnInit {
     })
   }
 
+  // Add function
   onAddClick() {
     const formData = this.contactForm.value;
     const contact = new Contact(formData);
@@ -56,12 +57,14 @@ export class ContactComponent implements OnInit {
     })
   }
 
+  // Update function
   onUpdateClick(contact: Contact) {
     this.contactService.updateContact(contact).subscribe(result => {
       
     })
   }
 
+  // Remove function
   onRemoveClick(id: number) {
     this.contactService.removeContactById(id).subscribe(result => {
       if (result) {
@@ -71,6 +74,7 @@ export class ContactComponent implements OnInit {
     })
   }
 
+  // 
   change(event: any) {
     this.contactId = event.target.value;
   }
