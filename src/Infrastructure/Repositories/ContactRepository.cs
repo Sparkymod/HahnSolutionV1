@@ -4,27 +4,32 @@ namespace Infrastructure.Repositories;
 
 public class ContactRepository : IContactRepository
 {
-    public ContactStorage Database { get; set; } = new ();
+    private readonly ContactStorage _database;
+
+    public ContactRepository(ContactStorage database)
+    {
+        _database = database;
+    }
 
     public Contact Create(Contact contact)
     {
-        if (Database.Contacts.Contains(contact)) return contact;
+        if (_database.Contacts.Contains(contact)) return contact;
 
-        Database.Contacts.Add(contact);
+        _database.Contacts.Add(contact);
         return contact;
     }
 
-    public IReadOnlyCollection<Contact> GetAll() => Database.Contacts;
+    public IReadOnlyCollection<Contact> GetAll() => _database.Contacts;
 
     public Contact GetById(int id)
     {
-        var contact = Database.Contacts.FirstOrDefault(c => c.Id.Equals(id));
+        var contact = _database.Contacts.FirstOrDefault(c => c.Id.Equals(id));
         return contact ?? new Contact();
     } 
 
     public bool Update(Contact updatedContact)
     {
-        var contact = Database.Contacts.FirstOrDefault(c => c.Id.Equals(updatedContact.Id));
+        var contact = _database.Contacts.FirstOrDefault(c => c.Id.Equals(updatedContact.Id));
 
         if (contact is null) return false;
 
@@ -44,12 +49,12 @@ public class ContactRepository : IContactRepository
 
     public bool DeleteById(int id)
     {
-        var contact = Database.Contacts.FirstOrDefault(c => c.Id.Equals(id));
+        var contact = _database.Contacts.FirstOrDefault(c => c.Id.Equals(id));
 
         if (contact is null) return false;
-        if (!Database.Contacts.Contains(contact)) return false;
+        if (!_database.Contacts.Contains(contact)) return false;
 
-        Database.Contacts.Remove(contact);
+        _database.Contacts.Remove(contact);
         return true;
     }
 }

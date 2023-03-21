@@ -2,7 +2,7 @@
 
 public class ContactStorage
 {
-    public List<Contact> Contacts { get; } = new ()
+    public List<Contact> Contacts { get; set; } = new ()
     {
         new Contact { Id = 1, FirstName = "John", LastName = "Doe", Email = "john.doe@example.com", PhoneNumber = "555-123-4567" },
         new Contact { Id = 2, FirstName = "Jane", LastName = "Doe", Email = "jane.doe@example.com", PhoneNumber = "555-987-6543" },
