@@ -1,1 +1,110 @@
 /* You can add global styles to this file, and also import other style files */
+/* BUTTON */
+button {
+  border: 1px solid rgb(0 0 0 / 10%);
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.25rem;
+  display: inline-block;
+  font-weight: 600;
+  line-height: 1.2;
+  font-size: 12px;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  box-shadow: rgb(0 0 0 / 1%) 0px 0px 0px 1px;
+}
+
+  button:hover {
+    background-color: #cecece;
+  }
+
+
+.btn-info {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+  color: #fff;
+}
+
+  .btn-info:hover {
+    background-color: #0b58cc !important;
+  }
+
+.btn-success {
+  background-color: #16a700 !important;
+  border-color: #16a700 !important;
+  color: #fff !important;
+}
+
+  .btn-success:hover {
+    background-color: #139600 !important;
+  }
+
+.btn-warning {
+  background-color: #ffb100;
+  border-color: #dd9900;
+  color: #000;
+}
+
+  .btn-warning:hover {
+    background-color: #dd9900 !important;
+  }
+
+.btn-danger {
+  background-color: darkred;
+  border-color: #860202;
+  color: #fff;
+}
+
+  .btn-danger:hover {
+    background-color: #740404 !important;
+  }
+
+.btn-normal {
+  background-color: #383838;
+  border-color: #3d3d3d;
+  color: #fff;
+}
+
+  .btn-normal:hover {
+    background-color: #232323 !important;
+  }
+
+input {
+  display: block;
+  width: auto;
+  padding: 0.25rem 0.6rem;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 0.3rem;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  box-shadow: 0 1px 0 1px rgb(0 0 0 / 4%);
+  transition: ease 0.3s all;
+}
+
+  input:hover {
+    border-color: #0d6efd;
+  }
+
+  input:focus {
+    color: #212529;
+    background-color: #fff;
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgb(13 110 253 / 10%);
+  }
+  /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type=number] {
+    -moz-appearance: textfield;
+  }

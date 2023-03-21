@@ -1,0 +1,91 @@
+<table class="table table-striped table-hover table-bordered table-content">
+  <thead>
+    <tr class="center-align">
+      <th>ID</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Email</th>
+      <th>Phone Number</th>
+      <th>Address</th>
+      <th>City</th>
+      <th>State</th>
+      <th>Zip Code</th>
+      <th>Country</th>
+      <th>Notes</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let contact of contactList" class="center-align">
+      <td>{{ contact.id }}</td>
+      <td>{{ contact.firstName }}</td>
+      <td>{{ contact.lastName }}</td>
+      <td>{{ contact.email }} </td>
+      <td>{{ contact.phoneNumber }} </td>
+      <td>{{ contact.address }} </td>
+      <td>{{ contact.city }} </td>
+      <td>{{ contact.state }} </td>
+      <td>{{ contact.zipCode }} </td>
+      <td>{{ contact.country }} </td>
+      <td>{{ contact.notes }} </td>
+      <td>
+        <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+          <button class="btn-danger" (click)="onRemoveClick(contact.id)">Remove</button>
+          <button class="btn-warning" (click)="onUpdateClick(contact)">Update</button>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br />
+<br />
+<h2> Add or update contact</h2>
+<div style="display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: center;">
+  <form [formGroup]="contactForm" id="addContactForm"
+        style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 0.5rem;">
+    <label>
+      First Name
+      <input formControlName="firstName" placeholder="Jhon" />
+    </label>
+    <label>
+      Last Name
+      <input formControlName="lastName" placeholder="Doe" />
+    </label>
+    <label>
+      Email
+      <input formControlName="email" placeholder="jhon.doe@company.com" />
+    </label>
+    <label>
+      Phone Number
+      <input formControlName="phoneNumber" placeholder="+1 888-999-2424" />
+    </label>
+    <label>
+      Address
+      <input formControlName="address" placeholder="Address here" />
+    </label>
+    <label>
+      City
+      <input formControlName="city" placeholder="City here" />
+    </label>
+    <label>
+      State
+      <input formControlName="state" placeholder="State here" />
+    </label>
+    <label>
+      Zip Code
+      <input formControlName="zipCode" placeholder="00000" />
+    </label>
+    <label>
+      Country
+      <input formControlName="country" placeholder="Country here" />
+    </label>
+    <label>
+      Notes
+      <input formControlName="notes" placeholder="Notes here" />
+    </label>
+  </form>
+  <button name="addContactForm" class="btn-info" (click)="onAddClick()" style="width: 5rem;">Submit</button>
+</div>
+<br />
+<hr />
+<br />
