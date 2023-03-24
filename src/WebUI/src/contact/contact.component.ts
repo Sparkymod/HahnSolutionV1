@@ -4,6 +4,10 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Contact } from '../models/contact.model';
 import { ContactService } from '../services/contact.service';
 
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.component.html',
@@ -15,9 +19,11 @@ export class ContactComponent implements OnInit {
   removeResults: string = "";
   count: number = 0;
   contactForm: FormGroup;
+  isUpdating: boolean = false;
 
   constructor(private contactService: ContactService, private fb: FormBuilder) {
     this.contactForm = this.fb.group({
+      id: [0],
       firstName: [''],
       lastName: [''],
       email: [''],
@@ -40,10 +46,24 @@ export class ContactComponent implements OnInit {
 
   // Search function
   onGetByIdClick(id: number) {
-    this.contactService.getContactById(id).subscribe(result => {
-      this.contactList = [];
-      this.contactList.push(result);
-    })
+    this.contactService.getContactById(id).pipe(
+      catchError((error: HttpErrorResponse) => {
+        let errorMessage: string;
+        if (error.status === 400 || error.status === 404) {
+          errorMessage = error.error || "Unknown error";
+        } else {
+          errorMessage = "Unknown error";
+        }
+
+        console.error("Error: " + errorMessage);
+        return of(null);
+      })
+    ).subscribe(result => {
+      if (result) {
+        this.contactList = [];
+        this.contactList.push(result);
+      }
+    });
   }
 
   // Add function
@@ -52,16 +72,75 @@ export class ContactComponent implements OnInit {
     const contact = new Contact(formData);
     this.count = this.count + 1;
     contact.id = this.count;
-    this.contactService.addContact(contact).subscribe(result => {
-      this.contactList.push(result);
+    this.isUpdating = false;
+
+    if (!this.contactForm.valid) {
+      console.error("form not valid");
+      return;
+    }
+
+    this.contactService.addContact(contact).pipe(
+      catchError((error: HttpErrorResponse) => {
+        let errorMessage: string;
+        if (error.status === 400 || error.status === 404) {
+          errorMessage = error.error || "Unknown error";
+        }
+        else {
+          errorMessage = "Unknown error";
+        }
+
+        console.error("Error: " + errorMessage);
+        return of(null);
+      })
+    ).subscribe(result => {
+      if (result) {
+        this.contactList.push(result);
+        window.location.reload();
+      }
     })
   }
 
   // Update function
-  onUpdateClick(contact: Contact) {
-    this.contactService.updateContact(contact).subscribe(result => {
-      
+  onUpdateClick() {
+    const contact = new Contact(this.contactForm.value);
+
+    this.contactService.updateContact(contact).pipe(
+      catchError((error: HttpErrorResponse) => {
+        let errorMessage: string;
+        if (error.status === 400 || error.status === 404) {
+          errorMessage = error.error || "Unknown error";
+        }
+        else {
+          errorMessage = "Unknown error";
+        }
+
+        console.error("Error: " + errorMessage);
+        return of(null);
+      })
+    ).subscribe(result => {
+      if (result) {
+        window.location.reload();
+      }
     })
+  }
+
+  onSelectContactFromTable(contact: Contact) {
+    const fb = FormBuilder;
+    this.isUpdating = true;
+
+    this.contactForm = this.fb.group({
+      id: contact.id ?? [0],
+      firstName: contact.firstName ?? [''],
+      lastName: contact.lastName ?? [''],
+      email: contact.email ?? [''],
+      phoneNumber: contact.phoneNumber ?? [''],
+      address: contact.address ?? [''],
+      city: contact.city ?? [''],
+      state: contact.state ?? [''],
+      zipCode: contact.zipCode ?? [''],
+      country: contact.country ?? [''],
+      notes: contact.notes ?? [''],
+    });
   }
 
   // Remove function
@@ -74,7 +153,7 @@ export class ContactComponent implements OnInit {
     })
   }
 
-  // 
+  // add id on change in input
   change(event: any) {
     this.contactId = event.target.value;
   }
