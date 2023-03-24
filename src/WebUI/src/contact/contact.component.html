@@ -45,54 +45,59 @@
         style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 0.5rem;">
     <label>
       First Name
-      <input type="text" minlength="3" maxlength="70"
-             title="Enter you first name" formControlName="firstName" placeholder="Jhon" required/>
+      <input type="text" title="Enter you first name" formControlName="firstName" placeholder="Jhon" required />
+      <span *ngIf="contactForm.get('firstName')?.errors?.['minlength']">
+        First Name must be at least 3 characters.
+      </span>
+      <span *ngIf="contactForm.get('firstName')?.errors?.['maxlength']">
+        First Name must not exceed 15 characters.
+      </span>
     </label>
 
     <label>
       Last Name
-      <input type="text" minlength="3" maxlength="70"
-             title="Enter your last name" formControlName="lastName" placeholder="Doe" required/>
+      <input type="text" title="Enter your last name" formControlName="lastName" placeholder="Doe" required />
     </label>
     <label>
       Email
-      <input type="email" minlength="3" maxlength="40" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
-             title="Enter a valid email address with @" formControlName="email" placeholder="jhon.doe@company.com" required/>
+      <input type="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+             title="Enter a valid email address with @" formControlName="email" placeholder="jhon.doe@company.com" required />
     </label>
     <label>
       Phone Number
-      <input type="text" minlength="11" maxlength="15" pattern="[0-9]{1,}[0-9]{3}[0-9]{3}[0-9]{4}"
-             title="Enter a valid phone number with global code" formControlName="phoneNumber" placeholder="1 777 888 9999" required/>
+      <input type="text" pattern="[0-9]{1,}[0-9]{3}[0-9]{3}[0-9]{4}"
+             title="Enter a valid phone number with global code" formControlName="phoneNumber" placeholder="1 777 888 9999" required />
     </label>
     <label>
       Address
-      <input formControlName="address" placeholder="Address here"/>
+      <input formControlName="address" placeholder="Address here" />
     </label>
     <label>
       City
-      <input formControlName="city" placeholder="City here"/>
+      <input formControlName="city" placeholder="City here" />
     </label>
     <label>
       State
-      <input formControlName="state" placeholder="State here"/>
+      <input formControlName="state" placeholder="State here" />
     </label>
     <label>
       Zip Code
-      <input formControlName="zipCode" placeholder="00000"/>
+      <input formControlName="zipCode" placeholder="00000" />
     </label>
     <label>
       Country
-      <input formControlName="country" placeholder="Country here"/>
+      <input formControlName="country" placeholder="Country here" />
     </label>
     <label>
       Notes
-      <input formControlName="notes" placeholder="Notes here"/>
+      <input formControlName="notes" placeholder="Notes here" />
     </label>
   </form>
   <button *ngIf="!isUpdating; else updateBtn" form="addContactForm" class="btn-success" (click)="onAddClick()" style="width: 5rem;">Add</button>
   <ng-template #updateBtn>
     <button form="addContactForm" class="btn-warning" (click)="onUpdateClick()" style="width: 5rem;">Update</button>
   </ng-template>
+  <button class="btn-normal" (click)="onClearForm()" style="width: 5rem;">Clear</button>
 </div>
 <br />
 <hr />

@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, Observable } from 'rxjs';
 import { Contact } from '../models/contact.model';
+import { of } from 'rxjs';
+
 
 var apiUrl = "http://localhost:5000";
 

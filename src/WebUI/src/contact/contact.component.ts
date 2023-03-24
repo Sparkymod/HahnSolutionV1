@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { Contact } from '../models/contact.model';
 import { ContactService } from '../services/contact.service';
@@ -21,19 +21,31 @@ export class ContactComponent implements OnInit {
   contactForm: FormGroup;
   isUpdating: boolean = false;
 
-  constructor(private contactService: ContactService, private fb: FormBuilder) {
-    this.contactForm = this.fb.group({
-      id: [0],
-      firstName: [''],
-      lastName: [''],
-      email: [''],
-      phoneNumber: [''],
-      address: [''],
-      city: [''],
-      state: [''],
-      zipCode: [''],
-      country: [''],
-      notes: [''],
+  constructor(private contactService: ContactService) {
+    this.contactForm = new FormGroup({
+      id: new FormControl(0),
+      firstName: new FormControl('', [
+        Validators.required,
+        Validators.minLength(1),
+        Validators.maxLength(70),
+      ]),
+      lastName: new FormControl('', [
+        Validators.required,
+        Validators.minLength(1),
+        Validators.maxLength(70),
+      ]),
+      email: new FormControl('', [
+        Validators.required,
+        Validators.email,
+        Validators.maxLength(40),
+      ]),
+      phoneNumber: new FormControl(''),
+      address: new FormControl(''),
+      city: new FormControl(''),
+      state: new FormControl(''),
+      zipCode: new FormControl(''),
+      country: new FormControl(''),
+      notes: new FormControl('')
     });
   }
 
@@ -47,99 +59,108 @@ export class ContactComponent implements OnInit {
   // Search function
   onGetByIdClick(id: number) {
     this.contactService.getContactById(id).pipe(
-      catchError((error: HttpErrorResponse) => {
+      catchError((errorResponse: HttpErrorResponse) => {
         let errorMessage: string;
-        if (error.status === 400 || error.status === 404) {
-          errorMessage = error.error || "Unknown error";
-        } else {
+        if (errorResponse.status === 400 || errorResponse.status === 404) {
+          errorMessage = errorResponse.error || "Unknown error";
+        }
+        else {
           errorMessage = "Unknown error";
         }
 
         console.error("Error: " + errorMessage);
         return of(null);
-      })
-    ).subscribe(result => {
-      if (result) {
-        this.contactList = [];
-        this.contactList.push(result);
-      }
-    });
+      })).subscribe(result => {
+        if (result) {
+          this.contactList = [];
+          this.contactList.push(result);
+        }
+      });
   }
 
   // Add function
   onAddClick() {
+    if (!this.contactForm.valid) {
+      console.log('Form is not valid');
+      return;
+    }
+
     const formData = this.contactForm.value;
     const contact = new Contact(formData);
     this.count = this.count + 1;
     contact.id = this.count;
     this.isUpdating = false;
 
-    if (!this.contactForm.valid) {
-      console.error("form not valid");
-      return;
-    }
-
-    this.contactService.addContact(contact).pipe(
-      catchError((error: HttpErrorResponse) => {
-        let errorMessage: string;
-        if (error.status === 400 || error.status === 404) {
-          errorMessage = error.error || "Unknown error";
-        }
-        else {
-          errorMessage = "Unknown error";
-        }
-
-        console.error("Error: " + errorMessage);
-        return of(null);
-      })
-    ).subscribe(result => {
+    this.contactService.addContact(contact).subscribe(result => {
       if (result) {
         this.contactList.push(result);
         window.location.reload();
       }
-    })
+    });
   }
 
   // Update function
   onUpdateClick() {
+    if (!this.contactForm.valid) {
+      console.log('Form is not valid');
+      return;
+    }
+
     const contact = new Contact(this.contactForm.value);
 
-    this.contactService.updateContact(contact).pipe(
-      catchError((error: HttpErrorResponse) => {
-        let errorMessage: string;
-        if (error.status === 400 || error.status === 404) {
-          errorMessage = error.error || "Unknown error";
-        }
-        else {
-          errorMessage = "Unknown error";
-        }
-
-        console.error("Error: " + errorMessage);
-        return of(null);
-      })
-    ).subscribe(result => {
+    this.contactService.updateContact(contact).subscribe(result => {
       if (result) {
         window.location.reload();
       }
-    })
+    });
   }
 
+  // function to select the contact you want to update
   onSelectContactFromTable(contact: Contact) {
-    const fb = FormBuilder;
     this.isUpdating = true;
 
-    this.contactForm = this.fb.group({
-      id: contact.id ?? [0],
-      firstName: contact.firstName ?? [''],
-      lastName: contact.lastName ?? [''],
-      email: contact.email ?? [''],
-      phoneNumber: contact.phoneNumber ?? [''],
-      address: contact.address ?? [''],
-      city: contact.city ?? [''],
-      state: contact.state ?? [''],
-      zipCode: contact.zipCode ?? [''],
-      country: contact.country ?? [''],
-      notes: contact.notes ?? [''],
+    this.contactForm = new FormGroup({
+      id: new FormControl(contact.id ?? [0]),
+      firstName: new FormControl(contact.firstName ?? ['']),
+      lastName: new FormControl(contact.lastName ?? ['']),
+      email: new FormControl(contact.email ?? ['']),
+      phoneNumber: new FormControl(contact.phoneNumber ?? ['']),
+      address: new FormControl(contact.address ?? ['']),
+      city: new FormControl(contact.city ?? ['']),
+      state: new FormControl(contact.state ?? ['']),
+      zipCode: new FormControl(contact.zipCode ?? ['']),
+      country: new FormControl(contact.country ?? ['']),
+      notes: new FormControl(contact.notes ?? ['']),
+    });
+  }
+
+  // Clear the form
+  onClearForm() {
+    this.isUpdating = false;
+    this.contactForm = new FormGroup({
+      id: new FormControl(0),
+      firstName: new FormControl('', [
+        Validators.required,
+        Validators.minLength(1),
+        Validators.maxLength(70),
+      ]),
+      lastName: new FormControl('', [
+        Validators.required,
+        Validators.minLength(1),
+        Validators.maxLength(70),
+      ]),
+      email: new FormControl('', [
+        Validators.required,
+        Validators.email,
+        Validators.maxLength(40),
+      ]),
+      phoneNumber: new FormControl(''),
+      address: new FormControl(''),
+      city: new FormControl(''),
+      state: new FormControl(''),
+      zipCode: new FormControl(''),
+      country: new FormControl(''),
+      notes: new FormControl('')
     });
   }
 

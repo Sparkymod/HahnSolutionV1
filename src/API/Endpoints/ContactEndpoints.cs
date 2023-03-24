@@ -20,7 +20,7 @@ public static class ContactEndpoints
 
         app.MapPostRoutes();
 
-        app.MapPostRoutes();
+        app.MapPutRoutes();
 
         app.MapDeleteRoutes();
     }
