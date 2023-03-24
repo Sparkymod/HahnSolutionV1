@@ -15,4 +15,9 @@
   <ItemGroup>
     <Folder Include="src\services\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="docker-compose.override.yml">
+      <DependentUpon>docker-compose.yml</DependentUpon>
+    </None>
+  </ItemGroup>
 </Project>

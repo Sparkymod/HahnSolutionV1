@@ -56,8 +56,22 @@ export class ContactComponent implements OnInit {
     });
   }
 
+  // Get all the contacts
+  onGetAll() {
+    this.contactService.getAllContacts().subscribe(result => {
+      this.contactList = result;
+      this.count = this.contactList.length;
+    });
+  }
+
   // Search function
   onGetByIdClick(id: number) {
+
+    // Return all if the number pass is 0
+    if (id === 0) {
+      this.onGetAll();
+      return;
+    }
     this.contactService.getContactById(id).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
         let errorMessage: string;
@@ -94,23 +108,25 @@ export class ContactComponent implements OnInit {
     this.contactService.addContact(contact).subscribe(result => {
       if (result) {
         this.contactList.push(result);
-        window.location.reload();
+        this.onGetAll();
       }
     });
   }
 
   // Update function
   onUpdateClick() {
+
+    // Form validation
     if (!this.contactForm.valid) {
       console.log('Form is not valid');
       return;
     }
-
-    const contact = new Contact(this.contactForm.value);
+    const formData = this.contactForm.value;
+    const contact = new Contact(formData);
 
     this.contactService.updateContact(contact).subscribe(result => {
       if (result) {
-        window.location.reload();
+        this.onGetAll();
       }
     });
   }
@@ -120,17 +136,17 @@ export class ContactComponent implements OnInit {
     this.isUpdating = true;
 
     this.contactForm = new FormGroup({
-      id: new FormControl(contact.id ?? [0]),
-      firstName: new FormControl(contact.firstName ?? ['']),
-      lastName: new FormControl(contact.lastName ?? ['']),
-      email: new FormControl(contact.email ?? ['']),
-      phoneNumber: new FormControl(contact.phoneNumber ?? ['']),
-      address: new FormControl(contact.address ?? ['']),
-      city: new FormControl(contact.city ?? ['']),
-      state: new FormControl(contact.state ?? ['']),
-      zipCode: new FormControl(contact.zipCode ?? ['']),
-      country: new FormControl(contact.country ?? ['']),
-      notes: new FormControl(contact.notes ?? ['']),
+      id: new FormControl(contact.id),
+      firstName: new FormControl(contact.firstName ?? ''),
+      lastName: new FormControl(contact.lastName ?? ''),
+      email: new FormControl(contact.email ?? ''),
+      phoneNumber: new FormControl(contact.phoneNumber ?? ''),
+      address: new FormControl(contact.address ?? ''),
+      city: new FormControl(contact.city ?? ''),
+      state: new FormControl(contact.state ?? ''),
+      zipCode: new FormControl(contact.zipCode ?? ''),
+      country: new FormControl(contact.country ?? ''),
+      notes: new FormControl(contact.notes ?? ''),
     });
   }
 
@@ -168,8 +184,8 @@ export class ContactComponent implements OnInit {
   onRemoveClick(id: number) {
     this.contactService.removeContactById(id).subscribe(result => {
       if (result) {
-        window.location.reload();
-        this.removeResults = "Contact removed!";
+        this.onGetAll();
+        this.onClearForm();
       }
     })
   }
