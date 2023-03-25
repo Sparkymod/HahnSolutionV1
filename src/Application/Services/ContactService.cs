@@ -37,4 +37,10 @@ public class ContactService : IContactService
     {
         return _contactRepository.DeleteById(id);
     }
+
+    public bool Exist(Contact contact)
+    {
+        var foundContact = _contactRepository.GetById(contact.Id);
+        return foundContact.Id == contact.Id;
+    }
 }

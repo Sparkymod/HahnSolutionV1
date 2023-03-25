@@ -6,18 +6,20 @@ namespace Application.Validators
     {
         public ContactValidator()
         {
-                RuleFor(contact => contact.FirstName)
-                    .NotEmpty().WithMessage("FirstName is required.")
-                    .Length(1, 70).WithMessage("This must be between 1 and 70 characters.");
+            RuleFor(contact => contact.Id).NotEmpty().GreaterThan(0);
 
-                RuleFor(contact => contact.LastName)
-                    .NotEmpty().WithMessage("LastName is required.")
-                    .Length(1, 70).WithMessage("This must be between 1 and 70 characters.");
+            RuleFor(contact => contact.FirstName)
+                .NotEmpty().WithMessage("FirstName is required.")
+                .Length(1, 70).WithMessage("This must be between 1 and 70 characters.");
 
-                RuleFor(contact => contact.Email)
-                    .NotEmpty().WithMessage("Email is required.")
-                    .EmailAddress().WithMessage("This is not a valid email.")
-                    .Length(1, 40).WithMessage("This must be between 1 and 40 characters.");
+            RuleFor(contact => contact.LastName)
+                .NotEmpty().WithMessage("LastName is required.")
+                .Length(1, 70).WithMessage("This must be between 1 and 70 characters.");
+
+            RuleFor(contact => contact.Email)
+                .NotEmpty().WithMessage("Email is required.")
+                .EmailAddress().WithMessage("This is not a valid email.")
+                .Length(1, 40).WithMessage("This must be between 1 and 40 characters.");
         }
     }
 }
